@@ -308,15 +308,16 @@ export async function handleSetKeys(request: Request, env: Env, userId: string):
     return errorResponse('Invalid password', 400);
   }
 
-  if (body.key) user.key = body.key;
-  if (body.encryptedPrivateKey) user.privateKey = body.encryptedPrivateKey;
-  if (body.publicKey) user.publicKey = body.publicKey;
   if (body.key && !looksLikeEncString(body.key)) {
     return errorResponse('key is not a valid encrypted string', 400);
   }
   if (body.encryptedPrivateKey && !looksLikeEncString(body.encryptedPrivateKey)) {
     return errorResponse('encryptedPrivateKey is not a valid encrypted string', 400);
   }
+
+  if (body.key) user.key = body.key;
+  if (body.encryptedPrivateKey) user.privateKey = body.encryptedPrivateKey;
+  if (body.publicKey) user.publicKey = body.publicKey;
   user.updatedAt = new Date().toISOString();
 
   await storage.saveUser(user);
